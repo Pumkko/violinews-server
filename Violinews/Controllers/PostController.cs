@@ -40,7 +40,7 @@ namespace Violinews.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("postId")]
+        [HttpDelete("{postId}")]
         public async Task<ActionResult> DeletePost(Guid postId)
         {
             await _mediator.Send(new DeletePostCommand(postId));

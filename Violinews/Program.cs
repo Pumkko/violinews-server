@@ -12,7 +12,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ViolinewsContext>(opt => opt.UseInMemoryDatabase("violinews"));
 
-builder.Services.AddCors(options => options.AddPolicy("AllowAnyOrigin", policy => policy.AllowAnyOrigin()));
+builder.Services.AddCors(options => options.AddPolicy("AllowAnyOrigin", policy =>
+{
+    policy.AllowAnyOrigin();
+    policy.AllowAnyMethod();
+}));
 
 builder.Services.AddMediatR(new Type[]
 {
