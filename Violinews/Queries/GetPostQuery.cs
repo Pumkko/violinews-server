@@ -3,8 +3,7 @@ using Violinews.Models;
 
 namespace Violinews.Queries
 {
-    public class GetPostQuery : IRequest<Post?>
+    public class GetPostQuery : IRequest<IEnumerable<Post>>
     {
-        public Guid PostId { get; init; }
     }
 }

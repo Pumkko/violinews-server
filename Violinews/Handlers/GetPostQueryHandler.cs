@@ -4,7 +4,7 @@ using Violinews.Queries;
 
 namespace Violinews.Handlers
 {
-    public class GetPostQueryHandler : IRequestHandler<GetPostQuery, Post?>
+    public class GetPostQueryHandler : IRequestHandler<GetPostQuery, IEnumerable<Post>>
     {
 
         private readonly ViolinewsContext _violinewsContext;
@@ -17,9 +17,9 @@ namespace Violinews.Handlers
         }
 
 
-        public Task<Post?> Handle(GetPostQuery request, CancellationToken cancellationToken)
+        public Task<IEnumerable<Post>> Handle(GetPostQuery request, CancellationToken cancellationToken)
         {
-            var post = _violinewsContext.Posts.SingleOrDefault(p => p.Id == request.PostId);
+            var post = _violinewsContext.Posts.AsEnumerable();
             return Task.FromResult(post);
         }
     }

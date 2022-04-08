@@ -20,12 +20,12 @@ namespace Violinews.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{postId}")]
-        public async Task<ActionResult> GetPost(Guid postId)
+        [HttpGet]
+        public async Task<ActionResult> GetPost()
         {
-            var queryPost = new GetPostQuery() { PostId = postId };
+            var queryPost = new GetPostQuery();
             var response = await _mediator.Send(queryPost);
-            if(response == null)
+            if(!response.Any())
             {
                 return NoContent();
             }
@@ -38,6 +38,13 @@ namespace Violinews.Controllers
         {
             var response = await _mediator.Send(command);
             return Ok(response);
+        }
+
+        [HttpDelete("postId")]
+        public async Task<ActionResult> DeletePost(Guid postId)
+        {
+            await _mediator.Send(new DeletePostCommand(postId));
+            return NoContent();
         }
   
     }

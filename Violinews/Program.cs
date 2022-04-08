@@ -17,7 +17,8 @@ builder.Services.AddDbContext<ViolinewsContext>(opt => opt.UseInMemoryDatabase("
 builder.Services.AddMediatR(new Type[]
 {
     typeof(AddNewPostCommand),
-    typeof(GetPostQuery)
+    typeof(GetPostQuery),
+    typeof(AddNewPostCommand)
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
