@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Violinews.Models;
 using Violinews.Queries;
 
@@ -17,10 +18,11 @@ namespace Violinews.Handlers
         }
 
 
-        public Task<IEnumerable<Post>> Handle(GetPostQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Post>> Handle(GetPostQuery request, CancellationToken cancellationToken)
         {
+            await _violinewsContext.Database.EnsureCreatedAsync();
             var post = _violinewsContext.Posts.AsEnumerable();
-            return Task.FromResult(post);
+            return post;
         }
     }
 }

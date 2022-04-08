@@ -18,6 +18,8 @@ namespace Violinews.Handlers
 
         public async Task<Guid> Handle(AddNewPostCommand request, CancellationToken cancellationToken)
         {
+            await _violinewsContext.Database.EnsureCreatedAsync();
+
             var id = Guid.NewGuid();
             var post = new Post(id, request.Title, request.Content, DateTime.UtcNow);
 

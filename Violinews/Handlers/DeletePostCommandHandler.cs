@@ -15,6 +15,7 @@ namespace Violinews.Handlers
 
         public async Task<Unit> Handle(DeletePostCommand request, CancellationToken cancellationToken)
         {
+            await _violinewsContext.Database.EnsureCreatedAsync();
             var postToDelete = new Post(request.PostId, string.Empty, string.Empty, DateTime.Now);
             _violinewsContext.Posts.Attach(postToDelete);
             _violinewsContext.Posts.Remove(postToDelete);

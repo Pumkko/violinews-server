@@ -10,7 +10,6 @@ namespace Violinews.Models
         { 
         }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Post>().HasData(new Post[]
