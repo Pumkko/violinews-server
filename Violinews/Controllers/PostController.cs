@@ -30,7 +30,7 @@ namespace Violinews.Controllers
                 return NoContent();
             }
 
-            return Ok(response);
+            return Ok(response.OrderByDescending(p => p.CreationDate));
         }
 
         [HttpPost]
