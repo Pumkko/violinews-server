@@ -1,6 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using System.Collections.ObjectModel;
 using Violinews.Commands;
+using Violinews.Models;
 using Violinews.Queries;
 
 namespace Violinews.Controllers
@@ -9,15 +12,16 @@ namespace Violinews.Controllers
     [Route("[controller]")]
     public class PostController : ControllerBase
     {
-
-
         private readonly ILogger<PostController> _logger;
         private readonly IMediator _mediator;
 
-        public PostController(ILogger<PostController> logger, IMediator mediator)
+        private readonly IHubContext<PostHub, IPostHub> _postHub;
+
+        public PostController(ILogger<PostController> logger, IMediator mediator, IHubContext<PostHub, IPostHub> postHub)
         {
             _logger = logger;
             _mediator = mediator;
+            _postHub = postHub;
         }
 
         [HttpGet]
@@ -25,18 +29,20 @@ namespace Violinews.Controllers
         {
             var queryPost = new GetPostQuery();
             var response = await _mediator.Send(queryPost);
-            if(!response.Any())
+            if (!response.Any())
             {
                 return NoContent();
             }
 
-            return Ok(response.OrderByDescending(p => p.CreationDate));
+            return Ok(response);
         }
 
         [HttpPost]
         public async Task<ActionResult> CreatePost([FromBody] AddNewPostCommand command)
         {
             var response = await _mediator.Send(command);
+
+            await _postHub.Clients.All.ReceiveMessage(response);
             return Ok(response);
         }
 
@@ -46,6 +52,5 @@ namespace Violinews.Controllers
             await _mediator.Send(new DeletePostCommand(postId));
             return NoContent();
         }
-  
     }
 }

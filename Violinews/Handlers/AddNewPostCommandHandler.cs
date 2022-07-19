@@ -5,7 +5,7 @@ using Violinews.Models.Commands;
 
 namespace Violinews.Handlers
 {
-    public class AddNewPostCommandHandler : IRequestHandler<AddNewPostCommand, Guid>
+    public class AddNewPostCommandHandler : IRequestHandler<AddNewPostCommand, Post>
     {
         private readonly ViolinewsContext _violinewsContext;
         private readonly IMediator _mediator;
@@ -16,18 +16,17 @@ namespace Violinews.Handlers
             _mediator = mediator;
         }
 
-        public async Task<Guid> Handle(AddNewPostCommand request, CancellationToken cancellationToken)
+        public async Task<Post> Handle(AddNewPostCommand request, CancellationToken cancellationToken)
         {
             await _violinewsContext.Database.EnsureCreatedAsync();
 
-            var id = Guid.NewGuid();
-            var post = new Post(id, request.Title, request.Content, DateTime.UtcNow);
+            var post = new Post(request.Id, request.Title, request.Content, DateTime.UtcNow);
 
             _violinewsContext.Posts.Add(post);
             await _violinewsContext.SaveChangesAsync(cancellationToken);
             await _mediator.Publish(new NewPostCreated(post), cancellationToken);
 
-            return id;
+            return post;
 
         }
     }

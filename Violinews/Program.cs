@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Violinews;
 using Violinews.Commands;
 using Violinews.Models;
 using Violinews.Queries;
@@ -11,11 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ViolinewsContext>(opt => opt.UseInMemoryDatabase("violinews"));
-
 builder.Services.AddCors(options => options.AddPolicy("AllowAnyOrigin", policy =>
 {
     policy.AllowAnyOrigin();
     policy.AllowAnyMethod();
+    policy.AllowAnyHeader();
 }));
 
 builder.Services.AddMediatR(new Type[]
@@ -24,6 +25,8 @@ builder.Services.AddMediatR(new Type[]
     typeof(GetPostQuery),
     typeof(AddNewPostCommand)
 });
+
+builder.Services.AddSignalR();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -44,4 +47,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapHub<PostHub>("/postHub");
 app.Run();
