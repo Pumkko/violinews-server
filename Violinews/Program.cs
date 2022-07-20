@@ -26,6 +26,8 @@ builder.Services.AddMediatR(new Type[]
     typeof(AddNewPostCommand)
 });
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddSignalR();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -48,4 +50,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<PostHub>("/postHub");
+app.MapHealthChecks("/health");
 app.Run();
