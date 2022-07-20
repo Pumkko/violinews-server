@@ -40,17 +40,17 @@ namespace Violinews.Controllers
         [HttpPost]
         public async Task<ActionResult> CreatePost([FromBody] AddNewPostCommand command)
         {
+            if(command.Content.ToUpperInvariant() == "FAIL PLEASE" || 
+                command.Title.ToUpperInvariant() == "FAIL PLEASE")
+            {
+                throw new Exception("You just asked me to fail");
+            }
+
+
             var response = await _mediator.Send(command);
 
             await _postHub.Clients.All.ReceiveMessage(response);
             return Ok(response);
-        }
-
-        [HttpDelete("{postId}")]
-        public async Task<ActionResult> DeletePost(Guid postId)
-        {
-            await _mediator.Send(new DeletePostCommand(postId));
-            return NoContent();
         }
     }
 }
