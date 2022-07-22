@@ -43,7 +43,7 @@ namespace Violinews.Controllers
             if(command.Content.ToUpperInvariant() == "FAIL PLEASE" || 
                 command.Title.ToUpperInvariant() == "FAIL PLEASE")
             {
-                throw new Exception("You just asked me to fail");
+                return BadRequest("You asked me to");
             }
 
 
